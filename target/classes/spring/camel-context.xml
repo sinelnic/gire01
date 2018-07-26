@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring       http://camel.apache.org/schema/spring/camel-spring.xsd">
+ 	<bean class="org.springframework.boot.context.embedded.ServletRegistrationBean" id="camelServlet">
+	    <property name="name" value="CamelServlet"/>
+	    <property name="loadOnStartup" value="1"/>
+	    <property name="servlet">
+ 		   <bean class="org.apache.camel.component.servlet.CamelHttpTransportServlet" id="camelServlet"/>
+        </property>
+        <property name="urlMappings" value="/*"/>
+ 	</bean>
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+        <route id="simple-route"/>
+    </camelContext>
+    <restConfiguration apiContextPath="api-docs" component="servlet"
+            enableCORS="true" host="localhost">
+            <camel:apiProperty key="api.title" value="obtenerToken"/>
+            <camel:apiProperty key="api.version" value="1.0.0"/>
+            <camel:apiProperty key="cors" value="true"/>
+        </restConfiguration>
+        <rest path="/obtenerToken">
+            <post consumes="application/json" type="java.lang.String" outType="java.lang.String" type="java.lang.String" uri="/obtenerToken">
+                <to uri="direct:obtenerToken"/>
+            </post>
+        </rest>
+    
+</beans>
